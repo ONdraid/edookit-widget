@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -57,6 +58,12 @@ public class EdookitWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.refreshButton, pendingReloadWidgetIntent);
 
             AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
+            Toast.makeText(context, "Provider Update", Toast.LENGTH_LONG).show();
+
+            Intent webShotIntent = new Intent(context, WebShot.class);
+            webShotIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            webShotIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            context.startActivity(webShotIntent);
         }
     }
 }

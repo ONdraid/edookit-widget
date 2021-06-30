@@ -4,8 +4,7 @@
     package="com.vomaon.edookit.widget">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +31,11 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
         </activity>
+
+        <activity android:name=".WebShot"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
         <receiver android:name=".EdookitWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
