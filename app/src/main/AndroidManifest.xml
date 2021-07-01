@@ -33,7 +33,12 @@
         </activity>
 
         <activity android:name=".WebShot"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/PopupTheme"
+            android:excludeFromRecents="true">
+        </activity>
+
+        <activity android:name=".AfterLoginActivity">
+
         </activity>
 
         <receiver android:name=".EdookitWidgetProvider">

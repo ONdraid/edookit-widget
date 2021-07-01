@@ -26,10 +26,14 @@ def main(username, password, school_id):
         s.get(login_check_url)
         s.post(login_url, data=payload)
         r = s.get(timetable_url)
-
-    soup = BeautifulSoup(r.text, 'html.parser')
-    soup.find(class_='timetable')['style'] = 'background-color:white;'
-    timetable_grab = '<html>\n<body>\n' + soup.find(class_='timetable').prettify() + '</body>\n</html>'
+    try:
+        soup = BeautifulSoup(r.text, 'html.parser')
+        soup.find(class_='timetable')['style'] = 'background-color:white;'
+        timetable_grab = '<html>\n<body>\n' + soup.find(class_='timetable').prettify() + '</body>\n</html>'
+        pass
+    except:
+        timetable_grab = "error"
+        pass
 
     # hti = Html2Image(output_path=files_dir)
     # hti.screenshot(html_str=timetable_grab, size=(900, 350), save_as='timetable.jpg')

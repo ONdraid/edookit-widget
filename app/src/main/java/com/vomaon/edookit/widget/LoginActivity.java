@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,40 +50,51 @@ public class LoginActivity extends AppCompatActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.setWebChromeClient(new WebChromeClient());
 
-        if(!Python.isStarted())
-            Python.start(new AndroidPlatform(this));
-        Python py = Python.getInstance();
-        PyObject pyObj = py.getModule("gethtmltable");
-
-        SharedPreferences sharedPref = this.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-        schoolID = findViewById(R.id.schoolIDInput);
-        username = findViewById(R.id.usernameInput);
-        password = findViewById(R.id.passwordInput);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("CommitPrefEdits")
             @Override
             public void onClick(View view) {
+                Context context = getApplicationContext();
+                if(!Python.isStarted())
+                    Python.start(new AndroidPlatform(context));
+                Python py = Python.getInstance();
+                PyObject pyObj = py.getModule("gethtmltable");
+
+                SharedPreferences sharedPref = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+                schoolID = findViewById(R.id.schoolIDInput);
+                username = findViewById(R.id.usernameInput);
+                password = findViewById(R.id.passwordInput);
+
                 schoolIDStr = schoolID.getText().toString();
                 usernameStr = username.getText().toString();
                 passwordStr = password.getText().toString();
 
-                PyObject obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
+                PyObject obj = null;
+                obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
                 data = obj.toString();
-                webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
+                if (data.equals("error")) {
+                    Toast.makeText(context,"Chyba: nesprávné přihlašovací údaje", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(context,"Registrace proběhla úspěšně", Toast.LENGTH_SHORT).show();
 
-                SharedPreferences.Editor editor;
-                editor = sharedPref.edit();
-                editor.putString("schoolID", schoolIDStr);
-                editor.putString("username", usernameStr);
-                editor.putString("password", passwordStr);
-                editor.putString("timetableHtml", data);
-                editor.apply();
+                    webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
 
-                Intent updateIntent = new Intent(LoginActivity.this, EdookitWidgetProvider.class);
-                updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
-                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-                sendBroadcast(updateIntent);
+                    SharedPreferences.Editor editor;
+                    editor = sharedPref.edit();
+                    editor.putString("schoolID", schoolIDStr);
+                    editor.putString("username", usernameStr);
+                    editor.putString("password", passwordStr);
+                    editor.putString("timetableHtml", data);
+                    editor.putBoolean("loginStatus", true);
+                    editor.apply();
+
+                    Intent updateIntent = new Intent(LoginActivity.this, EdookitWidgetProvider.class);
+                    updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                    int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
+                    updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                    sendBroadcast(updateIntent);
+                }
 
             }
         });
