@@ -37,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        LoginDialog loginDialog = new LoginDialog(LoginActivity.this);
+
         loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                 schoolIDStr = schoolID.getText().toString();
                 usernameStr = username.getText().toString();
                 passwordStr = password.getText().toString();
+
+                loginDialog.showLoginDialog();
 
                 startLoginRunnable();
             }
@@ -79,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             if (data.equals("error")) {
                                 Toast.makeText(context,"Chyba: nesprávné přihlašovací údaje", Toast.LENGTH_LONG).show();
+                                loginDialog.hideLoginDialog();
                             }
                             else {
                                 Toast.makeText(context,"Registrace proběhla úspěšně", Toast.LENGTH_SHORT).show();
@@ -98,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                                 int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
                                 updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                                 sendBroadcast(updateIntent);
+
+                                Intent intent = new Intent(context, AfterLoginActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         }
                     });

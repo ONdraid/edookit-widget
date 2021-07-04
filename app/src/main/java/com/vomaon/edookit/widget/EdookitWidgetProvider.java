@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 public class EdookitWidgetProvider extends AppWidgetProvider {
 
@@ -27,8 +26,6 @@ public class EdookitWidgetProvider extends AppWidgetProvider {
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.default_timetable_widget);
         views.setOnClickPendingIntent(R.id.textView, pendingReloadWidgetIntent);
         AppWidgetManager.getInstance(context).updateAppWidget(currentIds, views);
-
-        Toast.makeText(context, "Provider Update", Toast.LENGTH_LONG).show();
 
     }
 }
