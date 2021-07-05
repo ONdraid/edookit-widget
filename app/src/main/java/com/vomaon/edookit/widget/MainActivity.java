@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPref = this.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
 
         Boolean loginStatus = sharedPref.getBoolean("loginStatus", false);
         if (loginStatus.equals(false)) {

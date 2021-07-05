@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,19 +41,22 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginDialog loginDialog = new LoginDialog(LoginActivity.this);
 
+        schoolID = findViewById(R.id.schoolIDInput);
+        username = findViewById(R.id.usernameInput);
+        password = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
+
+        schoolID.addTextChangedListener(LoginWatcher);
+        username.addTextChangedListener(LoginWatcher);
+        password.addTextChangedListener(LoginWatcher);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("CommitPrefEdits")
             @Override
             public void onClick(View view) {
-                schoolID = findViewById(R.id.schoolIDInput);
-                username = findViewById(R.id.usernameInput);
-                password = findViewById(R.id.passwordInput);
-
-                schoolIDStr = schoolID.getText().toString();
-                usernameStr = username.getText().toString();
-                passwordStr = password.getText().toString();
+                schoolIDStr = schoolID.getText().toString().trim();
+                usernameStr = username.getText().toString().trim();
+                passwordStr = password.getText().toString().trim();
 
                 loginDialog.showLoginDialog();
 
@@ -82,13 +87,13 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (data.equals("error")) {
-                                Toast.makeText(context,"Chyba: nesprávné přihlašovací údaje", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
                                 loginDialog.hideLoginDialog();
                             }
                             else {
-                                Toast.makeText(context,"Registrace proběhla úspěšně", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,R.string.toast_login_success, Toast.LENGTH_SHORT).show();
 
-                                SharedPreferences sharedPref = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+                                SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor;
                                 editor = sharedPref.edit();
                                 editor.putString("schoolID", schoolIDStr);
@@ -116,5 +121,26 @@ public class LoginActivity extends AppCompatActivity {
 
         });
     }
+
+    private final TextWatcher LoginWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            String s = schoolID.getText().toString().trim();
+            String u = username.getText().toString().trim();
+            String p = password.getText().toString().trim();
+
+            loginButton.setEnabled(!s.isEmpty() && !u.isEmpty() && !p.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
 
 }

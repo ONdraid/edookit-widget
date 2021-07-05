@@ -24,7 +24,8 @@
 
         <activity android:name=".TimetableActivity"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:excludeFromRecents="true">
         </activity>
 
         <activity android:name=".LoginActivity"

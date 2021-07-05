@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Edookit Widget</string>
+    <string name="sign_out">Sign out</string>
+    <string name="school_id">School ID</string>
+    <string name="school_id_helper">Enter your school ID</string>
+    <string name="username">Username</string>
+    <string name="username_helper">Enter your username</string>
+    <string name="password">Password</string>
+    <string name="password_helper">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="toast_login_error">Error: incorrect login credentials</string>
+    <string name="toast_login_success">Login successful</string>
+    <string name="toast_widget_updating">Updating widget</string>
+    <string name="toast_widget_update">Widget updated</string>
+    <string name="toast_not_logged">Login to the app first</string>
+    <string name="loading">Loading…</string>
+    <string name="default_widget_text">Click here to update the widget</string>
 </resources>

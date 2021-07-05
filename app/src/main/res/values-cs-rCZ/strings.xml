@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Edookit Widget</string>
+    <string name="sign_out">Odhlásit</string>
+    <string name="school_id">ID školy</string>
+    <string name="school_id_helper">Zadejte ID Vaší školy</string>
+    <string name="username">Přihlašovací jméno</string>
+    <string name="username_helper">Zadejte Vaše přihlašovací jméno</string>
+    <string name="password">Heslo</string>
+    <string name="password_helper">Zadejte Vaše heslo</string>
+    <string name="login">Přihlásit</string>
+    <string name="toast_login_error">Chyba: nesprávné přihlašovací údaje</string>
+    <string name="toast_login_success">Přihlášení proběhlo úspěšně</string>
+    <string name="toast_widget_updating">Probíhá aktualizace widgetu</string>
+    <string name="toast_widget_update">Widget aktualizován</string>
+    <string name="toast_not_logged">Nejdříve se přihlašte v aplikaci</string>
+    <string name="loading">Načítání…</string>
+    <string name="default_widget_text">Klikněte zde pro aktualizaci widgetu</string>
+</resources>

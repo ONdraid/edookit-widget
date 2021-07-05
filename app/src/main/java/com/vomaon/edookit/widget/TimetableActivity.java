@@ -24,15 +24,13 @@ public class TimetableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timetable);
 
         webView = findViewById(R.id.timetableWebView);
-        webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         webView.getSettings().setBuiltInZoomControls(false);
         webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.setWebChromeClient(new WebChromeClient());
 
-        sharedPref = this.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
         data = sharedPref.getString("timetableHtml", "");
         webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
     }

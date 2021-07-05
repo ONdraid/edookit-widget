@@ -5,9 +5,9 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/signOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Odhlásit" />
+        android:text="@string/sign_out" />
 </RelativeLayout>
