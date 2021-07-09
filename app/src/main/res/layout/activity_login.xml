@@ -115,6 +115,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         android:enabled="false"
+        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
 
 
