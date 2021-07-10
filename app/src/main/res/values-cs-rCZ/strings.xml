@@ -16,4 +16,5 @@
     <string name="toast_not_logged">Nejdříve se přihlašte v aplikaci</string>
     <string name="loading">Načítání…</string>
     <string name="default_widget_text">Klikněte zde pro aktualizaci widgetu</string>
+    <string name="toast_network_error">Chyba: zkontrolujte připojení k síti</string>
 </resources>

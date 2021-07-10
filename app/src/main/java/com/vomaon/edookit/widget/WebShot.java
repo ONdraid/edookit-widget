@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -33,15 +35,95 @@ public class WebShot extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!isConnectedToInternet()) {
+            Toast.makeText(this,R.string.toast_network_error, Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup);
-
-        Toast.makeText(getApplicationContext(),R.string.toast_widget_updating, Toast.LENGTH_SHORT).show();
-
         webView = findViewById(R.id.timetableWebView);
 
         LoadTableRunnable runnable = new LoadTableRunnable();
         new Thread(runnable).start();
+    }
+
+    class LoadTableRunnable implements Runnable {
+        @Override
+        public void run() {
+            Context context = getApplicationContext();
+            sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
+            boolean logged = sharedPref.getBoolean("loginStatus", false);
+            if (!logged) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,R.string.toast_not_logged, Toast.LENGTH_LONG).show();
+                        Intent loginIntent = new Intent(context, LoginActivity.class);
+                        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(loginIntent);
+                        finish();
+                    }
+                });
+
+            } else {
+                String usernameStr = sharedPref.getString("username", "");
+                String passwordStr = sharedPref.getString("password", "");
+                String schoolIDStr = sharedPref.getString("schoolID", "");
+
+                if(!Python.isStarted())
+                    Python.start(new AndroidPlatform(context));
+                Python py = Python.getInstance();
+                PyObject pyObj = py.getModule("gethtmltable");
+                PyObject obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
+                data = obj.toString();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (data.equals("network_error")) {
+                            Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                        else if (data.equals("error")) {
+                            Toast.makeText(context, R.string.toast_login_error, Toast.LENGTH_LONG).show();
+                            editor.putBoolean("loginStatus", false);
+                            editor.apply();
+
+                            Intent loginIntent = new Intent(context, LoginActivity.class);
+                            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(loginIntent);
+                            finish();
+
+                        } else {
+                            editor.putString("timetableHtml", data);
+                            editor.apply();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+                                    webView.getSettings().setBuiltInZoomControls(false);
+                                    webView.getSettings().setLoadWithOverviewMode(true);
+                                    webView.getSettings().setUseWideViewPort(true);
+                                    webView.setWebViewClient(new WebViewClient() {
+                                        @Override
+                                        public void onPageFinished(WebView view, String url) {
+                                            super.onPageFinished(view, url);
+                                            webView.postDelayed(capture, 1000);
+                                        }
+                                    });
+
+                                    webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private final Runnable capture = new Runnable() {
@@ -106,76 +188,12 @@ public class WebShot extends Activity {
         Toast.makeText(this, R.string.toast_widget_update, Toast.LENGTH_SHORT).show();
     }
 
-    class LoadTableRunnable implements Runnable {
-        @Override
-        public void run() {
-            Context context = getApplicationContext();
-            sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
-            Boolean loginStatus = sharedPref.getBoolean("loginStatus", false);
-            if (loginStatus.equals(true)) {
-                String usernameStr = sharedPref.getString("username", "");
-                String passwordStr = sharedPref.getString("password", "");
-                String schoolIDStr = sharedPref.getString("schoolID", "");
+    private boolean isConnectedToInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo cellular = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-                if(!Python.isStarted())
-                    Python.start(new AndroidPlatform(context));
-                Python py = Python.getInstance();
-                PyObject pyObj = py.getModule("gethtmltable");
-                PyObject obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
-                data = obj.toString();
-
-                if (data.equals("error")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
-                            editor.putBoolean("loginStatus", false);
-                            editor.apply();
-
-                            Intent loginIntent = new Intent(context, LoginActivity.class);
-                            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(loginIntent);
-                            finish();
-                        }
-                    });
-                } else {
-                    editor.putString("timetableHtml", data);
-                    editor.apply();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-                            webView.getSettings().setBuiltInZoomControls(false);
-                            webView.getSettings().setLoadWithOverviewMode(true);
-                            webView.getSettings().setUseWideViewPort(true);
-                            webView.setWebViewClient(new WebViewClient() {
-                                @Override
-                                public void onPageFinished(WebView view, String url) {
-                                    super.onPageFinished(view, url);
-                                    webView.postDelayed(capture, 1000);
-                                }
-                            });
-
-                            webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
-                        }
-                    });
-                }
-
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,R.string.toast_not_logged, Toast.LENGTH_LONG).show();
-                        Intent loginIntent = new Intent(context, LoginActivity.class);
-                        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(loginIntent);
-                        finish();
-                    }
-                });
-            }
-        }
+        return (wifi != null && wifi.isConnected()) || (cellular != null && cellular.isConnected());
     }
 
 }

@@ -9,6 +9,7 @@
     <string name="password_helper">Enter your password</string>
     <string name="login">Login</string>
     <string name="toast_login_error">Error: incorrect login credentials</string>
+    <string name="toast_network_error">Error: check your network connection</string>
     <string name="toast_login_success">Login successful</string>
     <string name="toast_widget_updating">Updating widget</string>
     <string name="toast_widget_update">Widget updated</string>

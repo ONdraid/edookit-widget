@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,13 +56,18 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("CommitPrefEdits")
             @Override
             public void onClick(View view) {
-                schoolIDStr = schoolID.getText().toString().trim();
-                usernameStr = username.getText().toString().trim();
-                passwordStr = password.getText().toString().trim();
+                if(isConnectedToInternet()) {
+                    schoolIDStr = schoolID.getText().toString().trim();
+                    usernameStr = username.getText().toString().trim();
+                    passwordStr = password.getText().toString().trim();
 
-                loginDialog.showLoginDialog();
+                    loginDialog.showLoginDialog();
 
-                startLoginRunnable();
+                    startLoginRunnable();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                }
+
             }
 
             public void startLoginRunnable() {
@@ -89,6 +96,11 @@ public class LoginActivity extends AppCompatActivity {
                             if (data.equals("error")) {
                                 Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
                                 loginDialog.hideLoginDialog();
+
+                            } else if (data.equals("network_error")) {
+                                Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                                loginDialog.hideLoginDialog();
+
                             }
                             else {
                                 Toast.makeText(context,R.string.toast_login_success, Toast.LENGTH_SHORT).show();
@@ -110,8 +122,10 @@ public class LoginActivity extends AppCompatActivity {
                                 sendBroadcast(updateIntent);
 
                                 Intent intent = new Intent(context, AfterLoginActivity.class);
+                                loginDialog.hideLoginDialog();
                                 startActivity(intent);
                                 finish();
+
                             }
                         }
                     });
@@ -142,5 +156,13 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     };
+
+    private boolean isConnectedToInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo cellular = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return (wifi != null && wifi.isConnected()) || (cellular != null && cellular.isConnected());
+    }
 
 }
