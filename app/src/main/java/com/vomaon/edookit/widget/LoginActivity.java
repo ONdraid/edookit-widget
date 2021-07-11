@@ -6,11 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,18 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText schoolID, username, password;
-    String schoolIDStr, usernameStr, passwordStr, data;
-    Button loginButton;
-
-    Handler mainHandler = new Handler();
-
+    private EditText schoolID, username, password;
+    private String schoolIDStr, usernameStr, passwordStr, data;
+    private Button loginButton;
 
     @SuppressLint("SetJavaScriptEnabled")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -42,8 +34,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         LoginDialog loginDialog = new LoginDialog(LoginActivity.this);
+        Network network = new Network(LoginActivity.this);
+        PyWrapper pyWrapper = new PyWrapper(LoginActivity.this);
 
         schoolID = findViewById(R.id.schoolIDInput);
+        TextInputLayout schoolIDLayout = findViewById(R.id.schoolIDInputLayout);
         username = findViewById(R.id.usernameInput);
         password = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
@@ -52,11 +47,15 @@ public class LoginActivity extends AppCompatActivity {
         username.addTextChangedListener(LoginWatcher);
         password.addTextChangedListener(LoginWatcher);
 
+        schoolIDLayout.setEndIconOnClickListener(view -> loginDialog.showHelperDialog());
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("CommitPrefEdits")
             @Override
             public void onClick(View view) {
-                if(isConnectedToInternet()) {
+                if(!network.isConnected()) {
+                    Toast.makeText(getApplicationContext(), R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                } else {
                     schoolIDStr = schoolID.getText().toString().trim();
                     usernameStr = username.getText().toString().trim();
                     passwordStr = password.getText().toString().trim();
@@ -64,8 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                     loginDialog.showLoginDialog();
 
                     startLoginRunnable();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.toast_network_error, Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -80,59 +77,45 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Context context = getApplicationContext();
+                    data = pyWrapper.getData(usernameStr, passwordStr, schoolIDStr);
 
-                    if(!Python.isStarted())
-                        Python.start(new AndroidPlatform(context));
-                    Python py = Python.getInstance();
-                    PyObject pyObj = py.getModule("gethtmltable");
+                    runOnUiThread(() -> {
+                        if (data.equals("error")) {
+                            Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
+                            loginDialog.hideLoginDialog();
 
-                    PyObject obj = null;
-                    obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
-                    data = obj.toString();
+                        } else if (data.equals("network_error")) {
+                            Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                            loginDialog.hideLoginDialog();
 
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (data.equals("error")) {
-                                Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
-                                loginDialog.hideLoginDialog();
+                        }
+                        else {
+                            Toast.makeText(context,R.string.toast_login_success, Toast.LENGTH_SHORT).show();
 
-                            } else if (data.equals("network_error")) {
-                                Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
-                                loginDialog.hideLoginDialog();
+                            SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor;
+                            editor = sharedPref.edit();
+                            editor.putString("schoolID", schoolIDStr);
+                            editor.putString("username", usernameStr);
+                            editor.putString("password", passwordStr);
+                            editor.putString("timetableHtml", data);
+                            editor.putBoolean("loginStatus", true);
+                            editor.apply();
 
-                            }
-                            else {
-                                Toast.makeText(context,R.string.toast_login_success, Toast.LENGTH_SHORT).show();
+                            Intent updateIntent = new Intent(LoginActivity.this, EdookitWidgetProvider.class);
+                            updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
+                            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                            sendBroadcast(updateIntent);
 
-                                SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor;
-                                editor = sharedPref.edit();
-                                editor.putString("schoolID", schoolIDStr);
-                                editor.putString("username", usernameStr);
-                                editor.putString("password", passwordStr);
-                                editor.putString("timetableHtml", data);
-                                editor.putBoolean("loginStatus", true);
-                                editor.apply();
-
-                                Intent updateIntent = new Intent(LoginActivity.this, EdookitWidgetProvider.class);
-                                updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                                int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
-                                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-                                sendBroadcast(updateIntent);
-
-                                Intent intent = new Intent(context, AfterLoginActivity.class);
-                                loginDialog.hideLoginDialog();
-                                startActivity(intent);
-                                finish();
-
-                            }
+                            Intent intent = new Intent(context, AfterLoginActivity.class);
+                            loginDialog.hideLoginDialog();
+                            startActivity(intent);
+                            finish();
                         }
                     });
-
                 }
             }
-
         });
     }
 
@@ -156,13 +139,4 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     };
-
-    private boolean isConnectedToInternet() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        NetworkInfo cellular = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        return (wifi != null && wifi.isConnected()) || (cellular != null && cellular.isConnected());
-    }
-
 }

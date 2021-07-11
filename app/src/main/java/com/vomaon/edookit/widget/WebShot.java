@@ -11,8 +11,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -22,25 +20,34 @@ import android.webkit.WebViewClient;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
-
 public class WebShot extends Activity {
 
-    WebView webView;
-    SharedPreferences sharedPref;
-    String data;
+    private WebView webView;
+    private String data;
+    private SharedPreferences sharedPref;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (!isConnectedToInternet()) {
+        super.onCreate(savedInstanceState);
+        Network network = new Network(WebShot.this);
+        if (!network.isConnected()) {
             Toast.makeText(this,R.string.toast_network_error, Toast.LENGTH_LONG).show();
             finish();
+            return;
         }
 
-        super.onCreate(savedInstanceState);
+        sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        boolean logged = sharedPref.getBoolean("loginStatus", false);
+        if (!logged) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(loginIntent);
+            Toast.makeText(this,R.string.toast_not_logged, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_popup);
         webView = findViewById(R.id.timetableWebView);
 
@@ -51,78 +58,55 @@ public class WebShot extends Activity {
     class LoadTableRunnable implements Runnable {
         @Override
         public void run() {
-            Context context = getApplicationContext();
-            sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
-            boolean logged = sharedPref.getBoolean("loginStatus", false);
-            if (!logged) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,R.string.toast_not_logged, Toast.LENGTH_LONG).show();
+            Context context = WebShot.this;
+            String usernameStr = sharedPref.getString("username", "");
+            String passwordStr = sharedPref.getString("password", "");
+            String schoolIDStr = sharedPref.getString("schoolID", "");
+
+            PyWrapper pyWrapper = new PyWrapper(WebShot.this);
+            data = pyWrapper.getData(usernameStr, passwordStr, schoolIDStr);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
+
+                    if (data.equals("network_error")) {
+                        Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
+                        finish();
+
+                    }
+                    else if (data.equals("error")) {
+                        Toast.makeText(context, R.string.toast_login_error, Toast.LENGTH_LONG).show();
+                        editor.putBoolean("loginStatus", false);
+                        editor.apply();
+
                         Intent loginIntent = new Intent(context, LoginActivity.class);
                         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(loginIntent);
                         finish();
+
+                    } else {
+                        editor.putString("timetableHtml", data);
+                        editor.apply();
+
+                        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+                        webView.getSettings().setBuiltInZoomControls(false);
+                        webView.getSettings().setLoadWithOverviewMode(true);
+                        webView.getSettings().setUseWideViewPort(true);
+
+                        webView.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                                webView.postDelayed(capture, 1000);
+                            }
+                        });
+
+                        webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
                     }
-                });
-
-            } else {
-                String usernameStr = sharedPref.getString("username", "");
-                String passwordStr = sharedPref.getString("password", "");
-                String schoolIDStr = sharedPref.getString("schoolID", "");
-
-                if(!Python.isStarted())
-                    Python.start(new AndroidPlatform(context));
-                Python py = Python.getInstance();
-                PyObject pyObj = py.getModule("gethtmltable");
-                PyObject obj = pyObj.callAttr("main", usernameStr, passwordStr, schoolIDStr);
-                data = obj.toString();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (data.equals("network_error")) {
-                            Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
-                            finish();
-
-                        }
-                        else if (data.equals("error")) {
-                            Toast.makeText(context, R.string.toast_login_error, Toast.LENGTH_LONG).show();
-                            editor.putBoolean("loginStatus", false);
-                            editor.apply();
-
-                            Intent loginIntent = new Intent(context, LoginActivity.class);
-                            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(loginIntent);
-                            finish();
-
-                        } else {
-                            editor.putString("timetableHtml", data);
-                            editor.apply();
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-                                    webView.getSettings().setBuiltInZoomControls(false);
-                                    webView.getSettings().setLoadWithOverviewMode(true);
-                                    webView.getSettings().setUseWideViewPort(true);
-                                    webView.setWebViewClient(new WebViewClient() {
-                                        @Override
-                                        public void onPageFinished(WebView view, String url) {
-                                            super.onPageFinished(view, url);
-                                            webView.postDelayed(capture, 1000);
-                                        }
-                                    });
-
-                                    webView.loadDataWithBaseURL(null, data, null, "UTF-8", null);
-                                }
-                            });
-                        }
-                    }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -187,13 +171,4 @@ public class WebShot extends Activity {
 
         Toast.makeText(this, R.string.toast_widget_update, Toast.LENGTH_SHORT).show();
     }
-
-    private boolean isConnectedToInternet() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        NetworkInfo cellular = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        return (wifi != null && wifi.isConnected()) || (cellular != null && cellular.isConnected());
-    }
-
 }

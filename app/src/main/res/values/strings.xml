@@ -16,4 +16,7 @@
     <string name="toast_not_logged">Login to the app first</string>
     <string name="loading">Loading…</string>
     <string name="default_widget_text">Click here to update the widget</string>
+    <string name="helper_schoolID">schoolid</string>
+    <string name="helper_url">You can find your school ID in the login URL</string>
+    <string name="timetable">Timetable</string>
 </resources>

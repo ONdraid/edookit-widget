@@ -17,4 +17,7 @@
     <string name="loading">Načítání…</string>
     <string name="default_widget_text">Klikněte zde pro aktualizaci widgetu</string>
     <string name="toast_network_error">Chyba: zkontrolujte připojení k síti</string>
+    <string name="helper_schoolID">idskoly</string>
+    <string name="helper_url">ID školy můžete najít ve Vaší přihlašovací adrese</string>
+    <string name="timetable">Rozvrh hodin</string>
 </resources>

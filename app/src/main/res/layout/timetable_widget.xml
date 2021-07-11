@@ -29,8 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/edookitButton"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/timetable" />
+            android:scaleType="fitCenter" />
 
 
 </RelativeLayout>

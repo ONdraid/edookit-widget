@@ -30,7 +30,8 @@
         android:hint="@string/school_id"
         app:counterEnabled="true"
         app:counterMaxLength="20"
-        app:endIconMode="clear_text"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_baseline_info_24"
         app:helperText="@string/school_id_helper"
         app:layout_constraintBottom_toTopOf="@+id/usernameInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,14 +109,15 @@
     <Button
         android:id="@+id/loginButton"
         android:layout_width="142dp"
-        android:layout_height="54dp"
+        android:layout_height="45dp"
         android:layout_marginTop="28dp"
         android:text="@string/login"
+        android:textAllCaps="false"
+        android:background="@drawable/button_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         android:enabled="false"
-        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
 
 

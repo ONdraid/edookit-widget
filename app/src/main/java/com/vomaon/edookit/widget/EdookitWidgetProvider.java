@@ -24,7 +24,7 @@ public class EdookitWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingReloadWidgetIntent = PendingIntent.getActivity(context, 0, reloadWidgetIntent, 0);
 
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.default_timetable_widget);
-        views.setOnClickPendingIntent(R.id.textView, pendingReloadWidgetIntent);
+        views.setOnClickPendingIntent(R.id.widget_layout, pendingReloadWidgetIntent);
         AppWidgetManager.getInstance(context).updateAppWidget(currentIds, views);
 
     }

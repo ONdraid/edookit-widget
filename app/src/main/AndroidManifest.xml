@@ -42,7 +42,7 @@
 
         </activity>
 
-        <receiver android:name=".EdookitWidgetProvider">
+        <receiver android:name=".EdookitWidgetProvider" android:label="@string/timetable">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
