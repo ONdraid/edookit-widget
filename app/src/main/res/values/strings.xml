@@ -19,4 +19,5 @@
     <string name="helper_schoolID">schoolid</string>
     <string name="helper_url">You can find your school ID in the login URL</string>
     <string name="timetable">Timetable</string>
+    <string name="welcome">Welcome</string>
 </resources>

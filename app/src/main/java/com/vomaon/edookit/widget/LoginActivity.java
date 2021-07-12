@@ -17,14 +17,17 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText schoolID, username, password;
-    private String schoolIDStr, usernameStr, passwordStr, data;
+    private String schoolIDStr, usernameStr, passwordStr, fullname;
+    private boolean error;
     private Button loginButton;
+    private ConstraintLayout loginForm;
 
     @SuppressLint("SetJavaScriptEnabled")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         Network network = new Network(LoginActivity.this);
         PyWrapper pyWrapper = new PyWrapper(LoginActivity.this);
 
+        loginForm = findViewById(R.id.loginFormConstraintLayout);
         schoolID = findViewById(R.id.schoolIDInput);
         TextInputLayout schoolIDLayout = findViewById(R.id.schoolIDInputLayout);
         username = findViewById(R.id.usernameInput);
@@ -77,28 +81,29 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Context context = getApplicationContext();
-                    data = pyWrapper.getData(usernameStr, passwordStr, schoolIDStr);
+                    fullname = pyWrapper.getFullname(usernameStr, passwordStr, schoolIDStr);
 
                     runOnUiThread(() -> {
-                        if (data.equals("error")) {
+                        if (fullname.equals("error")) {
+                            loginForm.setBackgroundResource(R.drawable.login_form_error_bg);
+                            error = true;
+
                             Toast.makeText(context,R.string.toast_login_error, Toast.LENGTH_LONG).show();
                             loginDialog.hideLoginDialog();
 
-                        } else if (data.equals("network_error")) {
+                        } else if (fullname.equals("network_error")) {
                             Toast.makeText(context,R.string.toast_network_error, Toast.LENGTH_LONG).show();
                             loginDialog.hideLoginDialog();
 
                         }
                         else {
-                            Toast.makeText(context,R.string.toast_login_success, Toast.LENGTH_SHORT).show();
-
                             SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor;
                             editor = sharedPref.edit();
                             editor.putString("schoolID", schoolIDStr);
                             editor.putString("username", usernameStr);
                             editor.putString("password", passwordStr);
-                            editor.putString("timetableHtml", data);
+                            editor.putString("fullname", fullname);
                             editor.putBoolean("loginStatus", true);
                             editor.apply();
 
@@ -136,7 +141,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-
+            if(error) {
+                loginForm.setBackgroundResource(R.drawable.login_form_bg);
+                error = false;
+            }
         }
     };
 }

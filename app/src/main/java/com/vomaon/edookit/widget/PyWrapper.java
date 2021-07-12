@@ -22,4 +22,14 @@ public class PyWrapper {
 
         return obj.toString();
     }
+
+    public String getFullname(String username, String password, String schoolID) {
+        if(!Python.isStarted())
+            Python.start(new AndroidPlatform(activity));
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("gethtmltable");
+        PyObject obj = pyObj.callAttr("getFullname", username, password, schoolID);
+
+        return obj.toString();
+    }
 }

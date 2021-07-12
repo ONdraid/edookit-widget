@@ -3,122 +3,118 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="#f8fafa">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="203dp"
         android:layout_height="99dp"
-        android:layout_marginBottom="28dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/schoolIDInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/loginFormConstraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/edookit_banner" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/schoolIDInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginFormConstraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxWidth="500dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="28dp"
-        android:hint="@string/school_id"
-        app:counterEnabled="true"
-        app:counterMaxLength="20"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/ic_baseline_info_24"
-        app:helperText="@string/school_id_helper"
-        app:layout_constraintBottom_toTopOf="@+id/usernameInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:startIconDrawable="@drawable/ic_baseline_home_24"
-        tools:ignore="MissingConstraints">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/schoolIDInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="21" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:hint="@string/username"
-        app:counterEnabled="true"
-        app:counterMaxLength="20"
-        app:endIconMode="clear_text"
-        app:helperText="@string/username_helper"
+        android:background="@drawable/login_form_bg"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_baseline_person_24"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameInput"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/schoolIDInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="21" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/school_id"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:endIconDrawable="@drawable/ic_baseline_info_24"
+            app:endIconMode="custom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_baseline_home_24"
+            tools:ignore="MissingConstraints">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:hint="@string/password"
-        app:endIconMode="password_toggle"
-        app:helperText="@string/password_helper"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        tools:ignore="MissingConstraints">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/schoolIDInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="21" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordInput"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:maxLength="50" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/username"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/schoolIDInputLayout"
+            app:startIconDrawable="@drawable/ic_baseline_person_24"
+            tools:ignore="MissingConstraints">
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="142dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/login"
-        android:textAllCaps="false"
-        android:background="@drawable/button_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="21" />
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout"
+            app:startIconDrawable="@drawable/ic_baseline_lock_24"
+            tools:ignore="MissingConstraints">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLength="50" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="142dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_bg"
+            android:enabled="false"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

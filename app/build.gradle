@@ -11,13 +11,13 @@ android {
         applicationId "com.vomaon.edookit.widget"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 2
-        versionName '0.5'
+        versionCode 3
+        versionName '0.7'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
         python {
             buildPython "C:/Users/Ondra/AppData/Local/Programs/Python/Python38-32/python.exe"

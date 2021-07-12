@@ -7,7 +7,6 @@ def main(username, password, school_id):
     login_check_url = 'https://' + school_id + '.edookit.net/user/login?do=loginForm-checkCaptcha&loginForm-username=' + username
     timetable_url = 'https://' + school_id + '.edookit.net/timetable/?do=familyTimetable-resetFilter'
 
-
     payload = {
         'username': username,
         'password': password,
@@ -35,3 +34,31 @@ def main(username, password, school_id):
     except:
         return "error"
 
+
+def getFullname(username, password, school_id):
+    login_url = 'https://' + school_id + '.edookit.net/user/login'
+    login_check_url = 'https://' + school_id + '.edookit.net/user/login?do=loginForm-checkCaptcha&loginForm-username=' + username
+    home_url = 'https://' + school_id + '.edookit.net/?justLogged=1'
+
+    payload = {
+        'username': username,
+        'password': password,
+        'g-recaptcha-response': '',
+        'send': 'Přihlásit',
+        'remember': '',
+        '_do': 'loginForm-form-submit'
+    }
+
+    try:
+        with requests.session() as s:
+            s.get(login_check_url)
+            s.post(login_url, data=payload)
+            r = s.get(home_url)
+    except:
+        return "network_error"
+
+    try:
+        soup = BeautifulSoup(r.text, 'html.parser')
+        return soup.find(class_='fullname').text.strip()
+    except:
+        return "error"

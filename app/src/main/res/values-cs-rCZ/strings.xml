@@ -20,4 +20,5 @@
     <string name="helper_schoolID">idskoly</string>
     <string name="helper_url">ID školy můžete najít ve Vaší přihlašovací adrese</string>
     <string name="timetable">Rozvrh hodin</string>
+    <string name="welcome">Dobrý den,</string>
 </resources>

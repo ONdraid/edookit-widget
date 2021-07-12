@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,32 +19,36 @@ public class AfterLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_login);
 
+        TextView welcomeTextView = findViewById(R.id.welcomeTextView);
         button = findViewById(R.id.signOutButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = getApplicationContext();
-                SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor;
-                editor = sharedPref.edit();
 
-                editor.remove("schoolID");
-                editor.remove("username");
-                editor.remove("password");
-                editor.remove("timetableHtml");
-                editor.putBoolean("loginStatus", false);
-                editor.apply();
+        SharedPreferences sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        String fullname = sharedPref.getString("fullname", "");
+        String welcomeText = getString(R.string.welcome) + ' ' + fullname + "!";
+        welcomeTextView.setText(welcomeText);
 
-                Intent updateIntent = new Intent(context, EdookitWidgetProvider.class);
-                updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
-                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-                sendBroadcast(updateIntent);
+        button.setOnClickListener(view -> {
+            Context context = getApplicationContext();
 
-                Intent intent = new Intent(context, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            SharedPreferences.Editor editor;
+            editor = sharedPref.edit();
+            editor.remove("schoolID");
+            editor.remove("username");
+            editor.remove("password");
+            editor.remove("timetableHtml");
+            editor.remove("fullname");
+            editor.putBoolean("loginStatus", false);
+            editor.apply();
+
+            Intent updateIntent = new Intent(context, EdookitWidgetProvider.class);
+            updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), EdookitWidgetProvider.class));
+            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            sendBroadcast(updateIntent);
+
+            Intent intent = new Intent(context, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }
