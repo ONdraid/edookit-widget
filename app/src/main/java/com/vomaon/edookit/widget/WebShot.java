@@ -8,8 +8,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +28,9 @@ public class WebShot extends Activity {
 
     private WebView webView;
     private String data;
+    private Boolean nightMode;
     private SharedPreferences sharedPref;
+    private Thread thread;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -51,14 +57,19 @@ public class WebShot extends Activity {
         setContentView(R.layout.activity_popup);
         webView = findViewById(R.id.timetableWebView);
 
+        int nightModeFlags =
+                getApplicationContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        nightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+
         LoadTableRunnable runnable = new LoadTableRunnable();
-        new Thread(runnable).start();
+        thread = new Thread(runnable);
+        thread.start();
     }
 
     class LoadTableRunnable implements Runnable {
         @Override
         public void run() {
-            Context context = WebShot.this;
             String usernameStr = sharedPref.getString("username", "");
             String passwordStr = sharedPref.getString("password", "");
             String schoolIDStr = sharedPref.getString("schoolID", "");
@@ -69,6 +80,7 @@ public class WebShot extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Context context = WebShot.this;
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
 
                     if (data.equals("network_error")) {
@@ -94,7 +106,7 @@ public class WebShot extends Activity {
                         webView.getSettings().setBuiltInZoomControls(false);
                         webView.getSettings().setLoadWithOverviewMode(true);
                         webView.getSettings().setUseWideViewPort(true);
-
+                        webView.setBackgroundColor(Color.WHITE);
                         webView.setWebViewClient(new WebViewClient() {
                             @Override
                             public void onPageFinished(WebView view, String url) {
@@ -114,11 +126,11 @@ public class WebShot extends Activity {
         @Override
         public void run() {
             Bitmap b = screenshot(webView);
+            if (nightMode) {b = invert(b);}
             updateWidgets(b);
             finish();
         }
     };
-
 
     private static Bitmap screenshot(WebView webView) {
         webView.measure(View.MeasureSpec.makeMeasureSpec(
@@ -138,6 +150,34 @@ public class WebShot extends Activity {
         return bitmap;
     }
 
+    public Bitmap invert(Bitmap src)
+    {
+        int height = src.getHeight();
+        int width = src.getWidth();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+
+        ColorMatrix matrixGrayscale = new ColorMatrix();
+        matrixGrayscale.setSaturation(1);
+
+        ColorMatrix matrixInvert = new ColorMatrix();
+        matrixInvert.set(new float[]
+                {
+                        -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
+                        0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
+                        0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+                });
+        matrixInvert.preConcat(matrixGrayscale);
+
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrixInvert);
+        paint.setColorFilter(filter);
+
+        canvas.drawBitmap(src, 0, 0, paint);
+        return bitmap;
+    }
 
     private void updateWidgets(Bitmap bmp) {
         final AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
@@ -170,5 +210,21 @@ public class WebShot extends Activity {
         widgetManager.updateAppWidget(ids, views);
 
         Toast.makeText(this, R.string.toast_widget_update, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        if(thread!=null) {
+            thread.interrupt();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(thread!=null) {
+            thread.interrupt();
+        }
+        super.onDestroy();
     }
 }

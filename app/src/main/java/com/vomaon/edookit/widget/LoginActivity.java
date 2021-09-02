@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean error;
     private Button loginButton;
     private ConstraintLayout loginForm;
+    private Thread thread;
 
     @SuppressLint("SetJavaScriptEnabled")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -72,18 +73,23 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             public void startLoginRunnable() {
+                if(thread!=null) {
+                    thread.interrupt();
+                    thread = null;
+                }
                 LoginRunnable runnable = new LoginRunnable();
-                new Thread(runnable).start();
+                thread = new Thread(runnable);
+                thread.start();
             }
 
             class LoginRunnable implements Runnable {
 
                 @Override
                 public void run() {
-                    Context context = getApplicationContext();
                     fullname = pyWrapper.getFullname(usernameStr, passwordStr, schoolIDStr);
 
                     runOnUiThread(() -> {
+                        Context context = getApplicationContext();
                         if (fullname.equals("error")) {
                             loginForm.setBackgroundResource(R.drawable.login_form_error_bg);
                             error = true;
@@ -147,4 +153,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        if(thread!=null) {
+            thread.interrupt();
+        }
+        super.onDestroy();
+    }
 }
