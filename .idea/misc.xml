@@ -15,6 +15,8 @@
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/popup_bg.xml" value="0.18640350877192982" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/url_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/widget_bg.xml" value="0.3181818181818182" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/widget_lower_bg.xml" value="0.3181818181818182" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/widget_upper_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout-night-v21/timetable_widget.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout-night/activity_login.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout-night/default_timetable_widget.xml" value="0.3087719298245614" />
@@ -23,7 +25,7 @@
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout-night/timetable_widget.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_after_login.xml" value="0.12960526315789472" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_login.xml" value="0.3087719298245614" />
-        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_popup.xml" value="0.3047619047619048" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_popup.xml" value="0.23157894736842105" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_timetable.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/default_timetable_widget.xml" value="0.3047619047619048" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/helper_dialog.xml" value="0.3047619047619048" />

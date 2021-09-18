@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:background="#101010">
+    android:background="#292929">
 
     <ImageView
         android:id="@+id/imageView"
@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/loginFormConstraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/edookit_banner" />
+        app:srcCompat="@drawable/edookit_banner"
+        app:tint="@color/white" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginFormConstraintLayout"

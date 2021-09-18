@@ -13,9 +13,8 @@
         android:id="@+id/timetableWebView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-    </WebView>
+        android:layout_centerInParent="true"
+        android:translationY="2000dp"></WebView>
 
     <ProgressBar
         android:id="@+id/progressBar3"
@@ -25,6 +24,7 @@
         android:layout_centerInParent="true"
         android:indeterminateTint="#377fea"
         android:scaleX="4"
-        android:scaleY="4"/>
+        android:scaleY="4"
+        tools:targetApi="lollipop" />
 
 </RelativeLayout>

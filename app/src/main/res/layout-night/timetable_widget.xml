@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="3dp"
-    android:background="@drawable/widget_bg"
-    android:backgroundTint="@color/black">
+    android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/edookitButton"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/edookit_logo"
-        android:backgroundTint="#323232"
-        tools:targetApi="lollipop"
-        android:tint="@color/white"
-        tools:ignore="UseAppTint" />
-
-    <ImageButton
-        android:id="@+id/refreshButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/refresh_button"
-        android:backgroundTint="#323232"
-        tools:targetApi="lollipop"
-        android:tint="@color/white"
-        tools:ignore="UseAppTint" />
-
-    <ImageView
-        android:id="@+id/timetableImageView"
+    <RelativeLayout
+        android:id="@+id/upper_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edookitButton"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />
+        android:background="@drawable/widget_upper_bg"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp">
 
+        <ImageButton
+            android:id="@+id/edookitButton"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:backgroundTint="#323232"
+            android:scaleType="fitCenter"
+            android:src="@drawable/edookit_logo"
+            android:tint="@color/white"
+            tools:ignore="UseAppTint"
+            tools:targetApi="lollipop" />
+
+        <ImageButton
+            android:id="@+id/refreshButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:backgroundTint="#323232"
+            android:scaleType="fitCenter"
+            android:src="@drawable/refresh_button"
+            android:tint="@color/white"
+            tools:ignore="UseAppTint"
+            tools:targetApi="lollipop" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/upper_widget"
+        android:background="@drawable/widget_lower_bg"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp">
+
+        <ImageView
+            android:id="@+id/timetableImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+    </RelativeLayout>
 
 </RelativeLayout>
