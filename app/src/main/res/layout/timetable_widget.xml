@@ -3,33 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:background="@drawable/widget_bg">
+    android:background="@drawable/timetable_bg">
 
-        <ImageButton
-            android:id="@+id/edookitButton"
-            android:src="@drawable/edookit_logo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="fitCenter"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+    <ImageButton
+        android:id="@+id/edookitButton"
+        android:src="@drawable/edookit_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitCenter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-        <ImageButton
-            android:id="@+id/refreshButton"
-            android:src="@drawable/refresh_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitCenter" />
+    <ImageButton
+        android:id="@+id/refreshButton"
+        android:src="@drawable/refresh_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/timetableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/edookitButton"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-
+    <ImageView
+        android:id="@+id/timetableImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edookitButton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

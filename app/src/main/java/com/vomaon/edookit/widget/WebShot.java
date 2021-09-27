@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,6 +28,7 @@ public class WebShot extends Activity {
     private WebView webView;
     private String data;
     private Boolean nightMode;
+    private int[] currentIds;
     private SharedPreferences sharedPref;
     private Thread thread;
 
@@ -57,10 +57,11 @@ public class WebShot extends Activity {
         setContentView(R.layout.activity_popup);
         webView = findViewById(R.id.timetableWebView);
 
-        int nightModeFlags =
-                getApplicationContext().getResources().getConfiguration().uiMode &
-                        Configuration.UI_MODE_NIGHT_MASK;
-        nightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nightMode = extras.getBoolean("dark_theme");
+            currentIds = extras.getIntArray("current_ids");
+        }
 
         LoadTableRunnable runnable = new LoadTableRunnable();
         thread = new Thread(runnable);
@@ -180,11 +181,17 @@ public class WebShot extends Activity {
     }
 
     private void updateWidgets(Bitmap bmp) {
+        final int[] ids;
         final AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
-        final int[] ids = widgetManager.getAppWidgetIds(
-                new ComponentName(this, EdookitWidgetProvider.class));
-
+        if (nightMode) {
+            ids = widgetManager.getAppWidgetIds(
+                    new ComponentName(this, EdookitWidgetProviderDark.class));
+        } else {
+            ids = widgetManager.getAppWidgetIds(
+                    new ComponentName(this, EdookitWidgetProvider.class));
+        }
         if (ids.length < 1) {
+            finish();
             return;
         }
 
@@ -198,16 +205,24 @@ public class WebShot extends Activity {
         PendingIntent pendingTimetableIntent = PendingIntent.getActivity(this, 0, timetableIntent, 0);
 
         Intent reloadWidgetIntent = new Intent(this, WebShot.class);
-        PendingIntent pendingReloadWidgetIntent = PendingIntent.getActivity(this, 0, reloadWidgetIntent, 0);
+        reloadWidgetIntent.putExtra("dark_theme", nightMode);
+        reloadWidgetIntent.putExtra("current_ids", currentIds);
+        PendingIntent pendingReloadWidgetIntent = PendingIntent.getActivity(this, 0, reloadWidgetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final RemoteViews views = new RemoteViews(getPackageName(), R.layout.timetable_widget);
+        final RemoteViews views;
+        if (nightMode) {
+            views = new RemoteViews(getPackageName(), R.layout.timetable_widget_dark);
+        } else {
+            views = new RemoteViews(getPackageName(), R.layout.timetable_widget);
+        }
+
         views.setImageViewBitmap(R.id.timetableImageView, bmp);
 
         views.setOnClickPendingIntent(R.id.timetableImageView, pendingTimetableIntent);
         views.setOnClickPendingIntent(R.id.edookitButton, pendingUriIntent);
         views.setOnClickPendingIntent(R.id.refreshButton, pendingReloadWidgetIntent);
 
-        widgetManager.updateAppWidget(ids, views);
+        widgetManager.updateAppWidget(currentIds, views);
 
         Toast.makeText(this, R.string.toast_widget_update, Toast.LENGTH_SHORT).show();
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="50dp"
-    android:background="@drawable/widget_bg">
+    android:background="@drawable/rounded_bg">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

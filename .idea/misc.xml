@@ -6,6 +6,7 @@
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/login_form_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/login_form_error_bg.xml" value="0.18640350877192982" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/popup_bg.xml" value="0.3181818181818182" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/rounded_bg.xml" value="0.23941368078175895" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/timetable_widget.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/url_bg.xml" value="0.18640350877192982" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable-night/widget_bg.xml" value="0.3181818181818182" />
@@ -13,6 +14,9 @@
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/btn_dark_material.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/login_form_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/popup_bg.xml" value="0.18640350877192982" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/rounded_bg.xml" value="0.23941368078175895" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/timetable_bg.xml" value="0.23941368078175895" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/timetable_dark_bg.xml" value="0.23941368078175895" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/url_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/widget_bg.xml" value="0.3181818181818182" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/drawable/widget_lower_bg.xml" value="0.3181818181818182" />
@@ -27,10 +31,13 @@
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_login.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_popup.xml" value="0.23157894736842105" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/activity_timetable.xml" value="0.3087719298245614" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/default_timetable_dark_widget.xml" value="0.23157894736842105" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/default_timetable_widget.xml" value="0.3047619047619048" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/helper_dialog.xml" value="0.3047619047619048" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/login_dialog.xml" value="0.3047619047619048" />
         <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/timetable_widget.xml" value="0.3087719298245614" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/layout/timetable_widget_dark.xml" value="0.25" />
+        <entry key="..\:/Users/Ondra/AndroidStudioProjects/EdookitWidget/app/src/main/res/xml/timetable_dark_appwidget_info.xml" value="0.23157894736842105" />
       </map>
     </option>
   </component>
