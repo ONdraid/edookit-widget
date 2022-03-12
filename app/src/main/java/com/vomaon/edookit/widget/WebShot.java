@@ -198,8 +198,8 @@ public class WebShot extends Activity {
         String schoolID = sharedPref.getString("schoolID", "");
         Uri uri = Uri.parse("https://" + schoolID + ".edookit.net/user/login");
 
-        Intent uriIntent = new Intent(Intent.ACTION_VIEW, uri);
-        PendingIntent pendingUriIntent = PendingIntent.getActivity(this, 0, uriIntent, 0);
+        Intent browserIntent = new Intent(this, AfterLoginActivity.class);
+        PendingIntent pendingBrowserIntent = PendingIntent.getActivity(this, 0, browserIntent, 0);
 
         Intent timetableIntent = new Intent(this, TimetableActivity.class);
         PendingIntent pendingTimetableIntent = PendingIntent.getActivity(this, 0, timetableIntent, 0);
@@ -219,7 +219,7 @@ public class WebShot extends Activity {
         views.setImageViewBitmap(R.id.timetableImageView, bmp);
 
         views.setOnClickPendingIntent(R.id.timetableImageView, pendingTimetableIntent);
-        views.setOnClickPendingIntent(R.id.edookitButton, pendingUriIntent);
+        views.setOnClickPendingIntent(R.id.edookitButton, pendingBrowserIntent);
         views.setOnClickPendingIntent(R.id.refreshButton, pendingReloadWidgetIntent);
 
         widgetManager.updateAppWidget(currentIds, views);

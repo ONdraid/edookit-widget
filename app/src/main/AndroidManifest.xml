@@ -32,7 +32,6 @@
 
         <activity android:name=".TimetableActivity"
             android:screenOrientation="sensor"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:excludeFromRecents="true">
         </activity>
 

@@ -8,19 +8,19 @@ import pickle
 def main(username, password, school_id):
     try:
         r = login_with_cookies(school_id)
-        timetable_grab = format_html(r.text)
-        return timetable_grab
+        timetable_grab = format_html(r[0].text)
+        return [timetable_grab] + [r[1]] + [r[2]]
     except:
         try:
             r = login(username, password, school_id)
         except:
-            return "network_error"
+            return ["network_error"]
 
         try:
-            timetable_grab = format_html(r.text)
-            return timetable_grab
+            timetable_grab = format_html(r[0].text)
+            return [timetable_grab] + [r[1]] + [r[2]]
         except:
-            return "error"
+            return ["error"]
 
 
 def login(username, password, school_id):
@@ -38,6 +38,7 @@ def login(username, password, school_id):
     }
 
     with requests.session() as s:
+        s.get(login_url)
         s.get(login_check_url)
         s.post(login_url, data=payload)
         r = s.get(home_url)
@@ -48,7 +49,9 @@ def login(username, password, school_id):
         with open(file_name, 'wb') as f:
             pickle.dump(s.cookies, f)
 
-        return r
+        cookies = s.cookies.values()
+
+        return [r] + list(cookies)
 
 
 def login_with_cookies(school_id):
@@ -62,20 +65,22 @@ def login_with_cookies(school_id):
             s.cookies.update(pickle.load(f))
         r = s.get(home_url)
 
-    return r
+    cookies = s.cookies.values()
+
+    return [r] + list(cookies)
 
 
 def getFullname(username, password, school_id):
     try:
         r = login(username, password, school_id)
     except:
-        return "network_error"
+        return ["network_error"]
 
     try:
-        soup = BeautifulSoup(r.text, 'html.parser')
-        return soup.find(class_='fullname').text.strip()
+        soup = BeautifulSoup(r[0].text, 'html.parser')
+        return [soup.find(class_='fullname').text.strip()] + [r[1]] + [r[2]]
     except:
-        return "error"
+        return ["error"]
 
 
 def format_html(html):
