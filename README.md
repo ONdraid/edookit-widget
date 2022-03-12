@@ -1,4 +1,4 @@
-# edookit-widget
+# ![alt text](https://i.imgur.com/sFxfYGH.png "Icon") edookit-widget
 Public repository for unofficial Edookit app widget.
 
 
