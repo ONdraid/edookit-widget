@@ -13,6 +13,15 @@
         android:background="@color/black"
         />
 
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#377fea"
+        tools:targetApi="lollipop" />
+
     <RelativeLayout
         android:id="@+id/topPanel"
         android:layout_width="wrap_content"
