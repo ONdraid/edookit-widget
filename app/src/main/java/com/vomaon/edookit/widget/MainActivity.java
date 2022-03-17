@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_DENIED) {
                 canContinue = false;
-                Log.d("permission", "permission denied to WRITE_EXTERNAL_STORAGE - requesting it");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             }
         }
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 redirect();
             } else {
-                Toast.makeText(this, "Please enable file permission or reinstall app", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
                 finish();
             }
         } else {

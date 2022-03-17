@@ -21,4 +21,6 @@
     <string name="helper_url">ID školy můžete najít ve Vaší přihlašovací adrese</string>
     <string name="timetable">Rozvrh hodin</string>
     <string name="welcome">Dobrý den,</string>
+    <string name="file_browser_error">Chyba: nelze otevřít prohlížeč souborů</string>
+    <string name="permission_denied">Povolte oprávnění pro přístup k souborům nebo aplikaci přeinstalujte</string>
 </resources>

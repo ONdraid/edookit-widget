@@ -20,4 +20,6 @@
     <string name="helper_url">You can find your school ID in the login URL</string>
     <string name="timetable">Timetable</string>
     <string name="welcome">Welcome,</string>
+    <string name="file_browser_error">Error: cannot open file browser</string>
+    <string name="permission_denied">Enable file access permissions or reinstall the application</string>
 </resources>

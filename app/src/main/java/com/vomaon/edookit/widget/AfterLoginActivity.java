@@ -122,7 +122,7 @@ public class AfterLoginActivity extends AppCompatActivity {
                 } catch (ActivityNotFoundException e)
                 {
                     uploadMessage = null;
-                    Toast.makeText(AfterLoginActivity.this, "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AfterLoginActivity.this, R.string.file_browser_error, Toast.LENGTH_LONG).show();
                     return false;
                 }
                 return true;
