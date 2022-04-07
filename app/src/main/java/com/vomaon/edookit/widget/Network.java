@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class Network {
-    Activity activity;
+    private final Activity activity;
 
     Network (Activity activity) {
         this.activity = activity;

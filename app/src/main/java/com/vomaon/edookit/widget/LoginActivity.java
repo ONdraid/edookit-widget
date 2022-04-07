@@ -104,8 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor;
-                            editor = sharedPref.edit();
+                            SharedPreferences.Editor editor = sharedPref.edit();
+
                             editor.putString("schoolID", schoolIDStr);
                             editor.putString("username", usernameStr);
                             editor.putString("password", passwordStr);

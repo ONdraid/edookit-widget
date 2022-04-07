@@ -1,9 +1,11 @@
 package com.vomaon.edookit.widget;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,12 +15,30 @@ import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPref;
-    Boolean canContinue = true;
+    private SharedPreferences sharedPref;
+    private Boolean canContinue = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+
+        // Remove this on next update
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert packageInfo != null;
+        int versionCode = packageInfo.versionCode;
+        int registeredVersionCode = sharedPref.getInt("versionCode", 0);
+
+        if (versionCode > registeredVersionCode) {
+            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.putInt("versionCode", versionCode);
+            editor.apply();
+        }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -34,21 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void openLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     public void redirect() {
         Boolean loginStatus = sharedPref.getBoolean("loginStatus", false);
-        if (loginStatus.equals(false)) {
-            openLoginActivity();
+        Boolean introduced = sharedPref.getBoolean("introduced", false);
+        Intent intent;
+
+        if (introduced.equals(false)) {
+            intent = new Intent(this, OnboardingScreenActivity.class);
+        } else if (loginStatus.equals(false)) {
+            intent = new Intent(this, LoginActivity.class);
         } else {
-            Intent intent = new Intent(this, AfterLoginActivity.class);
-            startActivity(intent);
-            finish();
+            intent = new Intent(this, AfterLoginActivity.class);
         }
+        startActivity(intent);
+        finish();
     }
 
     @Override

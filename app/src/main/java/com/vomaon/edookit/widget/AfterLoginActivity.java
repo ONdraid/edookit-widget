@@ -9,14 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -26,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.WebSettingsCompat;
@@ -33,9 +35,8 @@ import androidx.webkit.WebViewFeature;
 
 public class AfterLoginActivity extends AppCompatActivity {
 
-    Button button;
-    WebView edookitWebView;
-    ProgressBar progressBar;
+    private WebView edookitWebView;
+    private ProgressBar progressBar;
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
     public static final int REQUEST_SELECT_FILE = 100;
@@ -61,14 +62,15 @@ public class AfterLoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "RequiresFeature"})
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @SuppressLint({"SetJavaScriptEnabled", "RequiresFeature", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_login);
 
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
-        button = findViewById(R.id.signOutButton);
+        Button button = findViewById(R.id.signOutButton);
         edookitWebView = findViewById(R.id.edookitWebView);
         progressBar = findViewById(R.id.progressBar3);
 
@@ -147,13 +149,20 @@ public class AfterLoginActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
             }
         });
+
         String schoolIDStr = sharedPref.getString("schoolID", "");
-        edookitWebView.loadUrl("https://" + schoolIDStr + ".edookit.net/user/login");
+
+        if (savedInstanceState != null)
+            edookitWebView.restoreState(savedInstanceState);
+        else
+            edookitWebView.loadUrl("https://" + schoolIDStr + ".edookit.net/");
 
         edookitWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
+                edookitWebView.loadUrl("javascript:window.HtmlViewer.showHTML" +
+                        "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
             }
         });
 
@@ -189,17 +198,45 @@ public class AfterLoginActivity extends AppCompatActivity {
             request.addRequestHeader("cookie", cookies);
             request.addRequestHeader("User-Agent", userAgent);
             request.setDescription("Downloading File...");
-            request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+            Uri uri = Uri.parse(url);
+            String filename = getFileName(uri);
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
-                            url, contentDisposition, mimeType));
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
             DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
             dm.enqueue(request);
             Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
         });
 
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                assert cursor != null;
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        edookitWebView.saveState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

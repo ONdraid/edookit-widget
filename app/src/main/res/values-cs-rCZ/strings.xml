@@ -23,4 +23,13 @@
     <string name="welcome">Dobrý den,</string>
     <string name="file_browser_error">Chyba: nelze otevřít prohlížeč souborů</string>
     <string name="permission_denied">Povolte oprávnění pro přístup k souborům nebo aplikaci přeinstalujte</string>
+    <string name="header3">Smluvní podmínky</string>
+    <string name="header1">Vše na jednom místě</string>
+    <string name="header2">Zabudovaný prohlížeč</string>
+    <string name="description1">Mějte vše po ruce!</string>
+    <string name="description2">Snadno přístupný jedním klepnutím!</string>
+    <string name="description3">Používáním této aplikace souhlasíte s našimi smluvními podmínkami.</string>
+    <string name="next">Další</string>
+    <string name="back">Zpět</string>
+    <string name="agree">Souhlasím</string>
 </resources>

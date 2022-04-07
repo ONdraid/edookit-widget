@@ -9,7 +9,7 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
 public class PyWrapper {
-    Activity activity;
+    private final Activity activity;
 
     PyWrapper (Activity activity) {
         this.activity = activity;

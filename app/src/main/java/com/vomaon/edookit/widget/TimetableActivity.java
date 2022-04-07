@@ -16,17 +16,13 @@ import androidx.webkit.WebViewFeature;
 
 public class TimetableActivity extends AppCompatActivity {
 
-    WebView webView;
-    SharedPreferences sharedPref;
-    String data;
-
     @SuppressLint({"SetJavaScriptEnabled", "RequiresFeature"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
 
-        webView = findViewById(R.id.timetableWebView);
+        WebView webView = findViewById(R.id.timetableWebView);
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
@@ -41,8 +37,8 @@ public class TimetableActivity extends AppCompatActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
 
-        sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        data = sharedPref.getString("timetableHtml", "");
+        SharedPreferences sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        String data = sharedPref.getString("timetableHtml", "");
         webView.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
     }
 }

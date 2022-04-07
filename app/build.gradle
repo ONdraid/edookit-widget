@@ -11,8 +11,8 @@ android {
         applicationId "com.vomaon.edookit.widget"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 5
-        versionName '0.9'
+        versionCode 6
+        versionName '1.0'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,7 +27,6 @@ android {
                 install "html2image"
             }
         }
-        versionNameSuffix 'alpha'
     }
 
     buildTypes {
@@ -57,4 +56,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "androidx.browser:browser:1.3.0"
 }

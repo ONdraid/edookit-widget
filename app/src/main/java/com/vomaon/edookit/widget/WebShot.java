@@ -198,8 +198,9 @@ public class WebShot extends Activity {
         String schoolID = sharedPref.getString("schoolID", "");
         Uri uri = Uri.parse("https://" + schoolID + ".edookit.net/user/login");
 
-        Intent browserIntent = new Intent(this, AfterLoginActivity.class);
-        PendingIntent pendingBrowserIntent = PendingIntent.getActivity(this, 0, browserIntent, 0);
+        Intent browserIntent = new Intent(this, CustomTabsBroadcastReceiver.class);
+        browserIntent.putExtra("url", ("https://" + schoolID + ".edookit.net/user/login"));
+        PendingIntent pendingBrowserIntent = PendingIntent.getBroadcast(this, 0, browserIntent, 0);
 
         Intent timetableIntent = new Intent(this, TimetableActivity.class);
         PendingIntent pendingTimetableIntent = PendingIntent.getActivity(this, 0, timetableIntent, 0);

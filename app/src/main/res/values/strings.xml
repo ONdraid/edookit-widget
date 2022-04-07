@@ -22,4 +22,13 @@
     <string name="welcome">Welcome,</string>
     <string name="file_browser_error">Error: cannot open file browser</string>
     <string name="permission_denied">Enable file access permissions or reinstall the application</string>
+    <string name="header3">Terms and Conditions</string>
+    <string name="header1">Everything in one place</string>
+    <string name="header2">Built-in browser with dark mode</string>
+    <string name="description1">Keep everything close at hand!</string>
+    <string name="description2">Easily accessible with one tap!</string>
+    <string name="description3">By using this app, you agree to our T&amp;C.</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="agree">Agree</string>
 </resources>

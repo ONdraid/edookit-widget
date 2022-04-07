@@ -48,7 +48,12 @@
             android:configChanges="uiMode">
         </activity>
 
-        <activity android:name=".AfterLoginActivity">
+        <activity android:name=".AfterLoginActivity"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
+
+        <activity android:name=".OnboardingScreenActivity">
 
         </activity>
 
@@ -69,6 +74,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/timetable_dark_appwidget_info" />
         </receiver>
+
+        <receiver
+            android:name=".CustomTabsBroadcastReceiver"
+            android:enabled="true" />
+
     </application>
 
 </manifest>
