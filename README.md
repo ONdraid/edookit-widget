@@ -22,7 +22,7 @@
 
 
 ### TO-DO:
-- [x] Integrate custom webview for website, instead of opening third-party browser
+- [x] Custom Tabs implementation 
 - [ ] Edookit website smart caching feature
 - [ ] Custom timetable layout, instead of current webview screenshot
 - [ ] Widget type displaying only current day
