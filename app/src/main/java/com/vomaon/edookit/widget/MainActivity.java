@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +58,17 @@ public class MainActivity extends AppCompatActivity {
     public void redirect() {
         Boolean loginStatus = sharedPref.getBoolean("loginStatus", false);
         Boolean introduced = sharedPref.getBoolean("introduced", false);
+        boolean darkModeControl = sharedPref.getBoolean("darkModeControl", false);
         Intent intent;
+
+        if (darkModeControl) {
+            boolean darkMode = sharedPref.getBoolean("darkMode", false);
+            if (darkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        }
 
         if (introduced.equals(false)) {
             intent = new Intent(this, OnboardingScreenActivity.class);

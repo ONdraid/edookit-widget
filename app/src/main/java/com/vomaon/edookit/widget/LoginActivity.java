@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,10 +14,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean error;
     private Button loginButton;
     private ConstraintLayout loginForm;
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
     private Thread thread;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -47,12 +52,50 @@ public class LoginActivity extends AppCompatActivity {
         username = findViewById(R.id.usernameInput);
         password = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
+        ImageView themeSwitcherImageView = findViewById(R.id.themeSwitcherImageView);
+
+        sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
 
         schoolID.addTextChangedListener(LoginWatcher);
         username.addTextChangedListener(LoginWatcher);
         password.addTextChangedListener(LoginWatcher);
 
         schoolIDLayout.setEndIconOnClickListener(view -> loginDialog.showHelperDialog());
+
+        themeSwitcherImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int defaultNightMode = AppCompatDelegate.getDefaultNightMode();
+                if (defaultNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putBoolean("darkMode", false);
+                }
+                else if (defaultNightMode == AppCompatDelegate.MODE_NIGHT_NO){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putBoolean("darkMode", true);
+                } else {
+                    int nightModeFlags =
+                            getApplicationContext().getResources().getConfiguration().uiMode &
+                                    Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            editor.putBoolean("darkMode", false);
+                            break;
+
+                        case Configuration.UI_MODE_NIGHT_NO:
+
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            editor.putBoolean("darkMode", true);
+                            break;
+                    }
+                }
+                editor.putBoolean("darkModeControl", true);
+                editor.apply();
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("CommitPrefEdits")
@@ -103,8 +146,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                         else {
-                            SharedPreferences sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
+                            sharedPref = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                            editor = sharedPref.edit();
 
                             editor.putString("schoolID", schoolIDStr);
                             editor.putString("username", usernameStr);

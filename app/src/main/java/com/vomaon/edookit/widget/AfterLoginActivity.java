@@ -23,6 +23,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -37,6 +39,7 @@ public class AfterLoginActivity extends AppCompatActivity {
 
     private WebView edookitWebView;
     private ProgressBar progressBar;
+    private SharedPreferences.Editor editor;
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
     public static final int REQUEST_SELECT_FILE = 100;
@@ -73,6 +76,7 @@ public class AfterLoginActivity extends AppCompatActivity {
         Button button = findViewById(R.id.signOutButton);
         edookitWebView = findViewById(R.id.edookitWebView);
         progressBar = findViewById(R.id.progressBar3);
+        ImageView themeSwitcherImageView3 = findViewById(R.id.themeSwitcherImageView3);
 
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
@@ -84,6 +88,7 @@ public class AfterLoginActivity extends AppCompatActivity {
         }
 
         SharedPreferences sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
         String fullname = sharedPref.getString("fullname", "");
         String welcomeText = getString(R.string.welcome) + " " + fullname + "!";
         welcomeTextView.setText(welcomeText);
@@ -169,8 +174,6 @@ public class AfterLoginActivity extends AppCompatActivity {
         button.setOnClickListener(view -> {
             Context context = getApplicationContext();
 
-            SharedPreferences.Editor editor;
-            editor = sharedPref.edit();
             editor.remove("schoolID");
             editor.remove("username");
             editor.remove("password");
@@ -188,6 +191,40 @@ public class AfterLoginActivity extends AppCompatActivity {
             Intent intent = new Intent(context, LoginActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        themeSwitcherImageView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int defaultNightMode = AppCompatDelegate.getDefaultNightMode();
+                if (defaultNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putBoolean("darkMode", false);
+                }
+                else if (defaultNightMode == AppCompatDelegate.MODE_NIGHT_NO){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putBoolean("darkMode", true);
+                } else {
+                    int nightModeFlags =
+                            getApplicationContext().getResources().getConfiguration().uiMode &
+                                    Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            editor.putBoolean("darkMode", false);
+                            break;
+
+                        case Configuration.UI_MODE_NIGHT_NO:
+
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            editor.putBoolean("darkMode", true);
+                            break;
+                    }
+                }
+                editor.putBoolean("darkModeControl", true);
+                editor.apply();
+            }
         });
 
         edookitWebView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {

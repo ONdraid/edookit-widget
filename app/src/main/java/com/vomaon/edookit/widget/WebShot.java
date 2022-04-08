@@ -23,6 +23,8 @@ import android.webkit.WebViewClient;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class WebShot extends Activity {
 
     private WebView webView;
@@ -44,6 +46,17 @@ public class WebShot extends Activity {
         }
 
         sharedPref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        boolean darkModeControl = sharedPref.getBoolean("darkModeControl", false);
+
+        if (darkModeControl) {
+            boolean darkMode = sharedPref.getBoolean("darkMode", false);
+            if (darkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        }
+
         boolean logged = sharedPref.getBoolean("loginStatus", false);
         if (!logged) {
             Intent loginIntent = new Intent(this, LoginActivity.class);

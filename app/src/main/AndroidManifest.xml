@@ -53,7 +53,9 @@
 
         </activity>
 
-        <activity android:name=".OnboardingScreenActivity">
+        <activity android:name=".OnboardingScreenActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
 
         </activity>
 

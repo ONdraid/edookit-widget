@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="top">
@@ -40,6 +41,20 @@
             android:text="@string/welcome"
             android:textAlignment="center"
             android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/themeSwitcherImageView3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toStartOf="@+id/signOutButton"
+            android:layout_toLeftOf="@+id/signOutButton"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_baseline_brightness_medium_24" />
 
         <Button
             android:id="@+id/signOutButton"
