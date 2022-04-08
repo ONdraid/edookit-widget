@@ -22,7 +22,11 @@
 
 
 ### TO-DO:
-- [x] Integrate custom webview for website, instead of opening third-party browser
+- [x] Custom Tabs implementation 
 - [ ] Edookit website smart caching feature
 - [ ] Custom timetable layout, instead of current webview screenshot
 - [ ] Widget type displaying only current day
+
+#
+
+### <p align="center"><a href="https://github.com/ONdraid/edookit-widget/releases/download/v1.0/edookit_widget_v1.0.apk" rel=""><img src="https://dabuttonfactory.com/button.png?t=Download&f=Open+Sans-Bold&ts=26&tc=fff&hp=45&vp=20&c=11&bgt=unicolored&bgc=642992&be=1" alt="edookit_widget_v0.9.apk" height="50" /></a></p>
