@@ -1,5 +1,5 @@
 ## Languages
-[<img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_the_United_Kingdom_%282-3%29.svg" width="100">](#terms--conditions)&nbsp;&nbsp;&nbsp;[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_Czech_Republic.svg/255px-Flag_of_the_Czech_Republic.svg.png" width="100">](#obchodní-podmínky)
+[<img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_the_United_Kingdom_%282-3%29.svg" width="100">](#terms--conditions)&nbsp;&nbsp;&nbsp;[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_Czech_Republic.svg/255px-Flag_of_the_Czech_Republic.svg.png" width="100">](#smluvní-podmínky)
 ### Terms & Conditions
 
 By downloading or using the app, these terms will automatically apply to you – you should make sure therefore that you read them carefully before using the app. The app itself, and all the trademarks, copyright, database rights, and other intellectual property rights related to it, still belong to Ondřej Vomáčka.
@@ -35,8 +35,8 @@ These terms and conditions are effective as of 2022-04-06
 If you have any questions or suggestions about my Terms and Conditions, do not hesitate to contact me at vomackaondrej@gmail.com.
 
 #
-[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_Czech_Republic.svg/255px-Flag_of_the_Czech_Republic.svg.png" width="50">](#obchodní-podmínky)
-### Obchodní podmínky
+[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_Czech_Republic.svg/255px-Flag_of_the_Czech_Republic.svg.png" width="50">](#smluvní-podmínky)
+### Smluvní podmínky
 
 Stažením nebo používáním aplikace se na vás automaticky vztahují tyto podmínky - před použitím aplikace byste si je proto měli pečlivě přečíst. Samotná aplikace a veškeré ochranné známky, autorská práva, práva k databázím a další práva duševního vlastnictví s ní spojená stále patří Ondřeji Vomáčkovi.
 
