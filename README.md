@@ -23,7 +23,8 @@
 
 ### TO-DO:
 - [x] Custom Tabs implementation 
-- [ ] Edookit website smart caching feature
+- [ ] Integrate PLUS4U
+- [ ] Get rid of python modules
 - [ ] Custom timetable layout, instead of current webview screenshot
 - [ ] Widget type displaying only current day
 
