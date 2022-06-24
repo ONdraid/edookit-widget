@@ -24,7 +24,7 @@
 ### TO-DO:
 - [x] Custom Tabs implementation 
 - [ ] Integrate PLUS4U
-- [ ] Get rid of python modules
+- [ ] Get rid of Python
 - [ ] Custom timetable layout, instead of current webview screenshot
 - [ ] Widget type displaying only current day
 
